@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git/GitHub 実用コマンド集</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .tab {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .tab.active {
+            background: rgba(255,255,255,0.4);
+        }
+        .content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .command-group {
+            margin-bottom: 30px;
+        }
+        .command-group h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            padding-left: 10px;
+        }
+        .command {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .command-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .command-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .tips {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Git/GitHub 実用コマンド集</h1>
+            <p>開発者のための完全ガイド</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="コマンドを検索..." id="searchInput">
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('basic')">基本操作</button>
+            <button class="tab" onclick="showTab('branch')">ブランチ</button>
+            <button class="tab" onclick="showTab('remote')">リモート</button>
+            <button class="tab" onclick="showTab('status')">状態確認</button>
+            <button class="tab" onclick="showTab('tools')">便利ツール</button>
+            <button class="tab" onclick="showTab('advanced')">高度な操作</button>
+        </div>
+        
+        <div class="content">
+            <div class="section active" id="basic">
+                <div class="command-group">
+                    <h3>リポジトリの初期化・クローン</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git init
+                            <button class="copy-btn" onclick="copyText('git init')">コピー</button>
+                        </div>
+                        <div class="command-desc">新しいリポジトリを初期化</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git clone <URL>
+                            <button class="copy-btn" onclick="copyText('git clone <URL>')">コピー</button>
+                        </div>
+                        <div class="command-desc">リモートリポジトリをクローン</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git clone -b <branch> <URL>
+                            <button class="copy-btn" onclick="copyText('git clone -b <branch> <URL>')">コピー</button>
+                        </div>
+                        <div class="command-desc">特定のブランチをクローン</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>ファイルの追加・コミット</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git add .
+                            <button class="copy-btn" onclick="copyText('git add .')">コピー</button>
+                        </div>
+                        <div class="command-desc">全ての変更をステージング</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git commit -m "message"
+                            <button class="copy-btn" onclick="copyText('git commit -m &quot;message&quot;')">コピー</button>
+                        </div>
+                        <div class="command-desc">変更をコミット</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git commit -am "message"
+                            <button class="copy-btn" onclick="copyText('git commit -am &quot;message&quot;')">コピー</button>
+                        </div>
+                        <div class="command-desc">add + commit を同時実行</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="branch">
+                <div class="command-group">
+                    <h3>ブランチの作成・切り替え</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git branch
+                            <button class="copy-btn" onclick="copyText('git branch')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチ一覧を表示</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git checkout -b <branch>
+                            <button class="copy-btn" onclick="copyText('git checkout -b <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチ作成と切り替え</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git switch <branch>
+                            <button class="copy-btn" onclick="copyText('git switch <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチ切り替え</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git branch -d <branch>
+                            <button class="copy-btn" onclick="copyText('git branch -d <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチ削除</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>マージ</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git merge <branch>
+                            <button class="copy-btn" onclick="copyText('git merge <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチをマージ</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git merge --no-ff <branch>
+                            <button class="copy-btn" onclick="copyText('git merge --no-ff <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">マージコミットを作成</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="remote">
+                <div class="command-group">
+                    <h3>リモート設定</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git remote -v
+                            <button class="copy-btn" onclick="copyText('git remote -v')">コピー</button>
+                        </div>
+                        <div class="command-desc">リモート一覧を表示</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git remote add origin <URL>
+                            <button class="copy-btn" onclick="copyText('git remote add origin <URL>')">コピー</button>
+                        </div>
+                        <div class="command-desc">リモートリポジトリを追加</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>プッシュ・プル</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git push -u origin <branch>
+                            <button class="copy-btn" onclick="copyText('git push -u origin <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">初回プッシュ</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git pull
+                            <button class="copy-btn" onclick="copyText('git pull')">コピー</button>
+                        </div>
+                        <div class="command-desc">リモートから取得</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git fetch --all
+                            <button class="copy-btn" onclick="copyText('git fetch --all')">コピー</button>
+                        </div>
+                        <div class="command-desc">全ブランチをフェッチ</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="status">
+                <div class="command-group">
+                    <h3>状態確認</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git status
+                            <button class="copy-btn" onclick="copyText('git status')">コピー</button>
+                        </div>
+                        <div class="command-desc">作業状態を表示</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git diff
+                            <button class="copy-btn" onclick="copyText('git diff')">コピー</button>
+                        </div>
+                        <div class="command-desc">変更差分を表示</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git diff --staged
+                            <button class="copy-btn" onclick="copyText('git diff --staged')">コピー</button>
+                        </div>
+                        <div class="command-desc">ステージング差分を表示</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>履歴確認</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git log --oneline
+                            <button class="copy-btn" onclick="copyText('git log --oneline')">コピー</button>
+                        </div>
+                        <div class="command-desc">コミット履歴を1行表示</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git log --graph --oneline --all
+                            <button class="copy-btn" onclick="copyText('git log --graph --oneline --all')">コピー</button>
+                        </div>
+                        <div class="command-desc">グラフ形式で履歴表示</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="tools">
+                <div class="command-group">
+                    <h3>変更の取り消し</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git restore <file>
+                            <button class="copy-btn" onclick="copyText('git restore <file>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ファイルの変更を取り消し</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git restore --staged <file>
+                            <button class="copy-btn" onclick="copyText('git restore --staged <file>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ステージングを取り消し</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git reset --hard HEAD~1
+                            <button class="copy-btn" onclick="copyText('git reset --hard HEAD~1')">コピー</button>
+                        </div>
+                        <div class="command-desc">直前のコミットを取り消し</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>Stash（一時保存）</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git stash
+                            <button class="copy-btn" onclick="copyText('git stash')">コピー</button>
+                        </div>
+                        <div class="command-desc">変更を一時保存</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git stash pop
+                            <button class="copy-btn" onclick="copyText('git stash pop')">コピー</button>
+                        </div>
+                        <div class="command-desc">stashを適用して削除</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git stash list
+                            <button class="copy-btn" onclick="copyText('git stash list')">コピー</button>
+                        </div>
+                        <div class="command-desc">stash一覧を表示</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" id="advanced">
+                <div class="command-group">
+                    <h3>タグ</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git tag -a <tag> -m "message"
+                            <button class="copy-btn" onclick="copyText('git tag -a <tag> -m &quot;message&quot;')">コピー</button>
+                        </div>
+                        <div class="command-desc">注釈付きタグを作成</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git push origin --tags
+                            <button class="copy-btn" onclick="copyText('git push origin --tags')">コピー</button>
+                        </div>
+                        <div class="command-desc">全タグをプッシュ</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>リベース</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git rebase <branch>
+                            <button class="copy-btn" onclick="copyText('git rebase <branch>')">コピー</button>
+                        </div>
+                        <div class="command-desc">ブランチをリベース</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git rebase -i HEAD~3
+                            <button class="copy-btn" onclick="copyText('git rebase -i HEAD~3')">コピー</button>
+                        </div>
+                        <div class="command-desc">インタラクティブリベース</div>
+                    </div>
+                </div>
+
+                <div class="command-group">
+                    <h3>検索・調査</h3>
+                    <div class="command">
+                        <div class="command-code">
+                            git grep "text"
+                            <button class="copy-btn" onclick="copyText('git grep &quot;text&quot;')">コピー</button>
+                        </div>
+                        <div class="command-desc">ファイル内容で検索</div>
+                    </div>
+                    <div class="command">
+                        <div class="command-code">
+                            git blame <file>
+                            <button class="copy-btn" onclick="copyText('git blame <file>')">コピー</button>
+                        </div>
+                        <div class="command-desc">変更者を特定</div>
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <h3>💡 効率化のTips</h3>
+                    <ul>
+                        <li>頻繁に使うコマンドはエイリアスに設定する</li>
+                        <li>.gitignore を活用して不要なファイルをコミットしない</li>
+                        <li>コミットメッセージは明確で簡潔に書く</li>
+                        <li>小さな単位で頻繁にコミットする</li>
+                        <li>プッシュする前に git status と git log で確認する</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // 全セクションを非表示
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 指定セクションを表示
+            document.getElementById(tabId).classList.add('active');
+            
+            // タブのアクティブ状態を更新
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // コピー成功の通知
+                const notification = document.createElement('div');
+                notification.textContent = 'コピーしました！';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #4CAF50;
+                    color: white;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    z-index: 1000;
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 2000);
+            });
+        }
+
+        // 検索機能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const commands = document.querySelectorAll('.command');
+            
+            commands.forEach(command => {
+                const code = command.querySelector('.command-code').textContent.toLowerCase();
+                const desc = command.querySelector('.command-desc').textContent.toLowerCase();
+                
+                if (code.includes(searchTerm) || desc.includes(searchTerm)) {
+                    command.style.display = 'block';
+                } else {
+                    command.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
